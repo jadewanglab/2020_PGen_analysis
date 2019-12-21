@@ -191,7 +191,6 @@ def sample_model(rng_key,
         ).get_samples(
             rng_key,
             y_vals=data,
-            regulation_logits=reg_logits,
             gid=gid,
             cid=cid,
             N=N
