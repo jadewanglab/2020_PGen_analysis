@@ -26,7 +26,7 @@ N = onp.unique(y_val_count)[0] # all genes have 269 y-values
 rng_key = random.PRNGKey(0)
 rng_key, rng_key_ = random.split(rng_key)
 
-num_warmup, num_samples = 500,500
+num_warmup, num_samples = 5000,1000
 num_chains = 1
 
 #%%
