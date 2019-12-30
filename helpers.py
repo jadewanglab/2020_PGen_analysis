@@ -170,20 +170,29 @@ def sample_model(rng_key,
                  num_chains=1):
 
     kernel = NUTS(model)
-    mcmc = MCMC(kernel, num_warmup, num_samples, num_chains, progress_bar=True)
 
-    mcmc.run(rng_key,
-            y_vals=data,
-            gid=gid,
-            cid=cid,
-            N=N)
+    mcmc = MCMC(
+        kernel,
+        num_warmup,
+        num_samples,
+        num_chains,
+        progress_bar=True
+    )
+
+    mcmc.run(
+        rng_key,
+        y_vals=data,
+        gid=gid,
+        cid=cid,
+        N=N
+    )
 
     mcmc.print_summary()
              
-    divergences = mcmc.get_extra_fields()["diverging"]
+    # divergences = mcmc.get_extra_fields()["diverging"]
 
     samples = mcmc.get_samples()
-    samples['divergences'] = divergences
+    # samples['divergences'] = divergences
 
     bC = numpyro.infer.Predictive(
             model,
