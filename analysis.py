@@ -113,21 +113,6 @@ gini_df['x_vals'] = onp.arange(gini_df.shape[0])
 # %%
 ph.plot_ginis(gini_df)
 
-#%%
-regulations = pd.read_csv(os.path.join(direc, 'Subtiwiki_regulations.csv'))
-regulations['locus_tag'] = regulations['locus tag'].str.replace('_','')
-
-#%%
-sigB_regulon = regulations[regulations.regulator=="SigB"]['locus_tag']
-# %%
-gini_df['sigB_regulon'] = 0
-gini_df.loc[gini_df.locus_tag.isin(sigB_regulon),'sigB_regulon'] = 1
-
-# %%
-ph.plot_ginis(gini_df,
-           color_var='Direction',
-           facet_var='sigB_regulon')
-
 # %%
 gini_density_plot = ph.plot_density(
     gini_df,

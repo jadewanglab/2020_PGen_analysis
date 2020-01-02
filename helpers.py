@@ -161,10 +161,7 @@ def horseshoe_model(y_vals,
 # %%
 def sample_model(rng_key,
                  model,
-                 data,
-                 gid,
-                 cid,
-                 N,
+                 model_args_dict,
                  num_warmup=500,
                  num_samples=500,
                  num_chains=1):
@@ -181,10 +178,7 @@ def sample_model(rng_key,
 
     mcmc.run(
         rng_key,
-        y_vals=data,
-        gid=gid,
-        cid=cid,
-        N=N
+        **model_args_dict
     )
 
     mcmc.print_summary()
@@ -194,17 +188,15 @@ def sample_model(rng_key,
     samples = mcmc.get_samples()
     # samples['divergences'] = divergences
 
-    bC = numpyro.infer.Predictive(
-            model,
-            samples
-        ).get_samples(
-            rng_key,
-            y_vals=data,
-            gid=gid,
-            cid=cid,
-            N=N
-        )
+    if not 'b_condition' in samples:
+        bC = numpyro.infer.Predictive(
+                model,
+                samples
+            ).get_samples(
+                rng_key,
+                **model_args_dict
+            )
 
-    samples['b_condition'] = bC
+        samples['b_condition'] = bC
 
     return samples

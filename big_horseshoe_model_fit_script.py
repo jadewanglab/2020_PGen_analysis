@@ -30,13 +30,17 @@ num_warmup, num_samples = 1000,500
 num_chains = 1
 
 #%%
+data_dict = {
+    'y_vals'=data.log2signal.values,
+    'gid'=data.gene_lookup.values,
+    'cid'=data.condition_lookup.values,
+    'N'=N # number of y-vals for each gene, calculated above
+}
+
 samples = h.sample_model(
     rng_key,
     model=h.horseshoe_model,
-    data=data.log2signal.values,
-    gid=data.gene_lookup.values,
-    cid=data.condition_lookup.values,
-    N=N, # number of y-vals for each gene, calculated above
+    model_args_dict=data_dict,
     num_warmup=num_warmup,
     num_samples=num_samples,
     num_chains=num_chains
