@@ -2,21 +2,14 @@
 import pandas as pd
 import numpy as onp
 import jax.numpy as np
-import jax
 
 import pickle
 import os
-from pprint import pprint
 
 from numpyro.diagnostics import hpdi
 
-from importlib import reload
-
 import helpers as h
 import plot_helpers as ph
-
-import altair as alt
-alt.data_transformers.disable_max_rows()
 
 # %%
 direc = '.'

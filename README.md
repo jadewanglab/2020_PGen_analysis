@@ -11,7 +11,7 @@ Some of the python scripts referenced in this readme rely on the included python
 
 Table S2 from (Nicolas, P. et al. Condition-dependent transcriptome reveals high-level regulatory architecture in Bacillus subtilis. Science 335, 1103–1106 (2012)) was downloaded from the following url: http://genome.jouy.inra.fr/basysbio/bsubtranscriptome/. Table S2 was saved as "TableS2_Nicolas_et_al.csv"
 
-Data contained in "TablsS2_Nicolas_et_al.csv" were tidied into a long format using the code in `nicolas_analysis.R`. Output of running the code in `nicolas_analysis.R` was saved in "data_long.csv.gz".
+Data contained in "TableS2_Nicolas_et_al.csv" were tidied into a long format using the code in `nicolas_analysis.R`. Output of running the code in `nicolas_analysis.R` was saved in "data_long.csv.gz".
 
 Data were further curated using code in `create_gene_info.py`. Running `create_gene_info.py` generated the file "data_long_with_design_info.csv.gz".
 
