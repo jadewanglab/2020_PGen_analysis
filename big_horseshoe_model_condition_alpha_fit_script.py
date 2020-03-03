@@ -34,7 +34,8 @@ data_dict = {
     'y_vals':data.log2signal.values,
     'gid':data.gene_lookup.values,
     'cid':data.condition_lookup.values,
-    'N':N # number of y-vals for each gene, calculated above
+    'N':N, # number of y-vals for each gene, calculated above,
+    'condition_intercept':True
 }
 
 samples = h.sample_model(
@@ -54,5 +55,5 @@ del samples['tau_tilde']
 del samples['c2_tilde']
 
 #%%
-with open('big_horseshoe_model_samples.pkl','wb') as pkl_file:
+with open('big_horseshoe_model_condition_intercept_samples.pkl','wb') as pkl_file:
     pickle.dump(samples, pkl_file)

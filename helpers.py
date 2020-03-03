@@ -10,6 +10,9 @@ import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS, Predictive
 from numpyro.diagnostics import hpdi
 
+numpyro.set_platform('cpu')
+numpyro.set_host_device_count(6)
+
 import pandas as pd
 
 #%%
@@ -114,7 +117,8 @@ def horseshoe_model(y_vals,
                     N, # array of number of y_vals in each gene
                     slab_df=1,
                     slab_scale=1,
-                    expected_large_covar_num=5): # expected large covar num here is the prior on the number of conditions we expect to affect expression of a given gene
+                    expected_large_covar_num=5, # expected large covar num here is the prior on the number of conditions we expect to affect expression of a given gene
+                    condition_intercept=False): 
 
     gene_count = gid.max()+1
     condition_count = cid.max()+1
@@ -149,10 +153,40 @@ def horseshoe_model(y_vals,
                             beta_tilde = beta_tilde)
     numpyro.sample("b_condition", dist.Delta(bC), obs=bC)
     
-    # calculate implied log2(signal) for each gene/condition
-    #   by adding each gene's intercept (a) to each of that gene's
-    #   condition effects (bC).
-    mu = a[gid] + bC[gid,cid]
+    if condition_intercept:
+        a_C_prior = dist.Normal(0., 1.)
+        a_C = numpyro.sample('a_condition', a_C_prior, sample_shape=(condition_count,))
+
+        mu = a[gid] + a_C[cid] + bC[gid,cid]
+
+    else:
+        # calculate implied log2(signal) for each gene/condition
+        #   by adding each gene's intercept (a) to each of that gene's
+        #   condition effects (bC).
+        mu = a[gid] + bC[gid,cid]
+
+    sig_prior = dist.Exponential(1.)
+    sigma = numpyro.sample('sigma', sig_prior)
+    return numpyro.sample('obs', dist.Normal(mu, sigma), obs=y_vals)
+
+def normal_model(y_vals,
+                              gid,
+                              cid):
+
+    gene_count = gid.max()+1
+    condition_count = cid.max()+1
+
+    a_prior = dist.Normal(10., 10.)
+    a = numpyro.sample("alpha", a_prior, sample_shape=(gene_count,))
+
+    a_cond_prior = dist.Normal(0., 5.)
+    a_cond = numpyro.sample("a_cond", a_cond_prior, sample_shape=(condition_count,))
+
+    b_shape = (gene_count, condition_count)
+    bC_prior = dist.Normal(0., 1.)
+    bC = numpyro.sample('b_condition', bC_prior, sample_shape=b_shape)
+    
+    mu = a[gid] + a_cond[cid] + bC[gid,cid]
 
     sig_prior = dist.Exponential(1.)
     sigma = numpyro.sample('sigma', sig_prior)
