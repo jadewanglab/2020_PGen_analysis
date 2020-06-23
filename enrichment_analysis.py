@@ -135,24 +135,31 @@ headon_regulon_pvals = {}
 for regulon,counts in headon_regulon_dict.items():
 
     headon = counts[1]
-    # if either direction has no CDSs, make that direction's count 0
+    # check whether head-on genes have and zero counts
+    # categories with zero counts will be absent,
+    #   so supplement here with zero.
     if not 0 in headon:
         headon[0] = 0
     if not 1 in headon:
         headon[1] = 0
 
+    # check whether co-directional genes have and zero counts
+    # categories with zero counts will be absent,
+    #   so supplement here with zero.
     codir = counts[0]
     if not 0 in codir:
         codir[0] = 0
     if not 1 in codir:
         codir[1] = 0
 
+    # make 2x2 contingency table
     contingency_table = onp.array(
         [headon,
         codir]
     )
     headon_regulon_obs[regulon] = contingency_table
 
+    # run Chi-square test
     chi2, p, dof, ex = stats.chi2_contingency(contingency_table)
     headon_regulon_exp[regulon] = ex
     headon_regulon_pvals[regulon] = p
