@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This repo contains data and code to reproduce analysis described in
-Schroeder, Sankar, Wang and Simmons, Curr Bio, 2020.
+This repository contains data and code to reproduce analysis described in
+Schroeder, Sankar, Wang and Simmons, PLoS Genet, 2020.
 
 Some of the python scripts referenced in this readme rely on the included python files `helpers.py` and `plot_helpers.py` to be read in as modules.
 
@@ -38,10 +38,14 @@ Bayesian analysis of each condition's effect on each gene's expression was perfo
 python3 ./big_horseshoe_model_fit_script.py
 ```
 
-The python script `big_horseshoe_model_fit_script.py` samples the posterior distribution for, among other parameters, each gene's intercept log2signal and the effect of each condition on log2signal. An independent Finnish Horseshoe prior (Piironen and Vehtari, Electron J Stat 2017) was applied to each gene to avoid inferring many false-positive effects.
+The python script `big_horseshoe_model_fit_script.py` samples the posterior distribution for, among other parameters, each gene's intercept log2signal and the effect of each condition on the log2signal for each gene. A Finnish Horseshoe prior (Piironen and Vehtari, Electron J Stat 2017) was applied to each gene to avoid inferring many false-positive effects.
 
-Running `big_horseshoe_model_fit_script.py` generates the file `big_horseshoe_model_samples.pkl`. Due to the large size of `big_horseshoe_model_samples.pkl`, I could not include it in thie repo. However, running the code as described will recreate my results.
+Running `big_horseshoe_model_fit_script.py` generates the file `big_horseshoe_model_samples.pkl`. Due to the large size of `big_horseshoe_model_samples.pkl`, I could not include it in thie repository. However, running the code as described will recreate my results.
 
 ## Interpretation of sampled posteriors
 
 The sampled posteriors from `big_horseshoe_model_fit_script.py` were then interpreted using code in `analysis.py`.
+
+## Testing for enrichment of head-on genes in the SigB regulon
+
+Table 1 from Schroeder, Sankar, Wang and Simmons, PLoS Genet, 2020 was prepared using code in `analysis.py`. Annotations of genes from the Nicolas et al. dataset as in/not in the SigB regulon were taken from the file `Subtiwiki_regulations.csv`, contains information on known regulatory interactions in _B. subtilis_. `Subtiwiki_regulations.csv` is included in the repository for reproducibility, or can be downloaded (the information may have changed since our analysis) at http://subtiwiki.uni-goettingen.de/v3/exports.
