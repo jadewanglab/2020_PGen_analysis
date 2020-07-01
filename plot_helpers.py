@@ -1,5 +1,5 @@
 import altair as alt
-
+import seaborn as sns
 
 def set_base_density_chart(base_chart,
                            data_var,
@@ -177,3 +177,43 @@ def plot_ginis(df, color_var=None, facet_var=None):
         )
 
     return(plot)
+
+def plot_bars(df, color_var=None):
+
+    bar = alt.Chart(df).mark_bar().encode(
+        column=alt.Column(
+            'regulator:N',
+            axis=alt.Axis(
+                # axisWidth=1.0,
+                offset=-8.0,
+                orient='bottom'
+            ),
+            scale=alt.Scale(padding=4.0)
+        ),
+        x=alt.X('headon:O', title='Regulator', axis=False),
+        y=alt.Y(
+            'percent:Q',
+            title='Proportion of head-on or co-directional genes regulated by X',
+            axis=alt.Axis(grid=False),
+        ),
+        color='{}:N'.format(color_var),
+    )
+
+    return(bar)
+
+def plot_bars_sns(df, color_var=None):
+
+    bar = sns.catplot(
+        x="regulator",
+        y="percent",
+        hue=color_var,
+        data=df,
+        kind='bar',
+        legend_out=True,
+    )
+
+    bar.set_ylabels("Percentage of head-on or co-directional CDSs regulated by x")
+    bar.set_xlabels("Regulator")
+    bar._legend.remove()
+    bar.ax.legend(loc="upper right")
+    return(bar)

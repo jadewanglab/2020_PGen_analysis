@@ -7,6 +7,7 @@ from Bio import SeqIO
 import os
 
 import helpers as h
+import plot_helpers as ph
 
 # %%
 direc = '.'
@@ -75,8 +76,9 @@ regulon_dict = {
     'sinR' : regulations[regulations.regulator=="SinR"]['locus_tag'],
     # only use genes activated by spx, to limit analysis to those genes upregulated during spx-regulated stress response
     'spx' : regulations[(regulations.regulator=="Spx") & (regulations['mode'] == "activation")]['locus_tag'],
-    'abrB' : regulations[regulations.regulator=="AbrB"]['locus_tag'],
     'spo0A' : regulations[regulations.regulator=="Spo0A"]['locus_tag'],
+    'lexA' : regulations[regulations.regulator=="LexA"]['locus_tag'],
+    # 'sigA' : regulations[regulations.regulator=="SigA"]['locus_tag'],
 }
 
 # %% annotate CDSs with information on whether each CDS is in each regulon
@@ -99,8 +101,8 @@ pprint(regulon_contents)
     # sigM is missing 12 from cds_df
     # sinR is good
     # spx is missing 2 from cds_df
-    # abrB is missing 8 from cds_df
     # spo0A is missing 26 from cds_df
+    # lexA is good
 
 # %%
 missing_idx = {}
@@ -172,5 +174,44 @@ for regulon in headon_regulon_obs:
 
 # %%
 pprint(headon_regulon_pvals)
+
+#%%
+headon_count = cds_df[cds_df.headon==1].shape[0]
+codir_count = cds_df[cds_df.headon==0].shape[0]
+
+# %%
+regulator_names = []
+ho_cd = []
+percent_of_CDS = []
+
+for regulon, obs in headon_regulon_obs.items():
+
+    headon_obs = obs[0,1]
+    codir_obs = obs[1,1]
+
+    regulator = regulon[0].upper() + regulon[1:]
+
+    regulator_names.extend([regulator, regulator])
+    ho_cd.extend(['Head-on', 'Co-directional'])
+    percent_of_CDS.extend([headon_obs/headon_count*100, codir_obs/codir_count*100])
+
+regulon_headon_percent_df = pd.DataFrame(
+    data = {
+        'regulator': regulator_names,
+        'percent': percent_of_CDS,
+        'headon': ho_cd,
+    }
+)
+
+# %%
+enrichment_bar_plot = ph.plot_bars_sns(
+    regulon_headon_percent_df,
+    color_var = 'headon',
+)
+enrichment_bar_plot
+
+# %%
+enrichment_bar_plot.savefig('enrichment_bar_plot.png')
+enrichment_bar_plot.savefig('enrichment_bar_plot.svg')
 
 # %%
