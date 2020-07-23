@@ -78,7 +78,6 @@ regulon_dict = {
     'spx' : regulations[(regulations.regulator=="Spx") & (regulations['mode'] == "activation")]['locus_tag'],
     'spo0A' : regulations[regulations.regulator=="Spo0A"]['locus_tag'],
     'lexA' : regulations[regulations.regulator=="LexA"]['locus_tag'],
-    # 'sigA' : regulations[regulations.regulator=="SigA"]['locus_tag'],
 }
 
 # %% annotate CDSs with information on whether each CDS is in each regulon
@@ -121,7 +120,7 @@ for regulon,idx in missing_idx.items():
         print(missing_loci)
 
 # missing loci are misc_RNA or other. Not CDSs.
-# addition missing in the numbers above are duplicate records
+# additional missing in the numbers above are duplicate records
 
 #%%
 headon_regulon_dict = {}

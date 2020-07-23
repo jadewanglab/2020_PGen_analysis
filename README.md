@@ -1,4 +1,4 @@
-# Analysis of data from Nicolas et al., Science 2012
+# Data analysis performed in Schroeder, Sankar, Wang and Simmons, PLoS Genetics, 2020.
 
 ## Introduction
 
@@ -7,15 +7,19 @@ Schroeder, Sankar, Wang and Simmons, PLoS Genet, 2020.
 
 Some of the python scripts referenced in this readme rely on the included python files `helpers.py` and `plot_helpers.py` to be read in as modules.
 
+## Plotting gene expression distributions from Schroeder et al., Curr Biol, 2016
+
+The natural-logarithm transform was applied to RPKM values of each CDS from Schroeder _et al._, Curr Biol, 2016. The z-score for each gene's $ln(RPKM)$ was calculated, and CDSs were then subset by their direction of transcription relative to DNA replciation. This resulted in the data present in `PY79_ma_line_z-scores.csv`. Values in `PY79_ma_line_z-scores.csv` were plotted using code in `ma_line_rpkm_distributions.py`.
+
 ## Data preparation
 
-Table S2 from (Nicolas, P. et al. Condition-dependent transcriptome reveals high-level regulatory architecture in Bacillus subtilis. Science 335, 1103–1106 (2012)) was downloaded from the following url: http://genome.jouy.inra.fr/basysbio/bsubtranscriptome/. Table S2 was saved as "TableS2_Nicolas_et_al.csv"
+Table S2 from (Nicolas, P. _et al._, Condition-dependent transcriptome reveals high-level regulatory architecture in Bacillus subtilis. Science 335, 1103–1106 (2012)) was downloaded from the following url: http://genome.jouy.inra.fr/basysbio/bsubtranscriptome/. Table S2 was saved as "TableS2_Nicolas_et_al.csv"
 
 Data contained in "TableS2_Nicolas_et_al.csv" were tidied into a long format using the code in `nicolas_analysis.R`. Output of running the code in `nicolas_analysis.R` was saved in "data_long.csv.gz".
 
 Data were further curated using code in `create_gene_info.py`. Running `create_gene_info.py` generated the file "data_long_with_design_info.csv.gz".
 
-"data_long_with_design_info.csv.gz", contains data with the following variables:
+`data_long_with_design_info.csv.gz` contains data with the following variables:
 
 | Name | Locus_tag | headon | condition | replicate | log2signal | gene_lookup | condition_lookup |
 
@@ -46,6 +50,6 @@ Running `big_horseshoe_model_fit_script.py` generates the file `big_horseshoe_mo
 
 The sampled posteriors from `big_horseshoe_model_fit_script.py` were then interpreted using code in `analysis.py`.
 
-## Testing for enrichment of head-on genes in the SigB regulon
+## Testing for enrichment of head-on genes in stress regulons
 
-Table 1 from Schroeder, Sankar, Wang and Simmons, PLoS Genet, 2020 was prepared using code in `enrichment_analysis.py`. Annotations of genes from the Nicolas et al. dataset as in/not in the SigB regulon were taken from the file `Subtiwiki_regulations.csv`, contains information on known regulatory interactions in _B. subtilis_. `Subtiwiki_regulations.csv` is included in the repository for reproducibility, or can be downloaded (the information may have changed since our analysis) at http://subtiwiki.uni-goettingen.de/v3/exports.
+Table 1 from Schroeder, Sankar, Wang and Simmons, PLoS Genet, 2020 was prepared using code in `enrichment_analysis.py`. Annotations of genes from the Nicolas et al. dataset as in/not in each regulon were taken from the file `Subtiwiki_regulations.csv`, which contains information on known regulatory interactions in _B. subtilis_. `Subtiwiki_regulations.csv` is included in the repository for reproducibility, or can be downloaded (the information may have changed since our analysis) at http://subtiwiki.uni-goettingen.de/v3/exports.
